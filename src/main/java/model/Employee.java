@@ -7,6 +7,7 @@ public class Employee {
     private  String ma_surname;
     private  String email;
     private  Float salary;
+    private String curp;
 
 
     public Employee(){
@@ -18,7 +19,8 @@ public class Employee {
         String pa_surname,
         String ma_surname,
         String email,
-        Float salary
+        Float salary,
+        String curp
         )
     {
         this.first_name=first_name;
@@ -26,6 +28,7 @@ public class Employee {
         this.ma_surname=ma_surname;
         this.email=email;
         this.salary=salary;
+        this.curp = curp;
 
     }
 
@@ -77,8 +80,16 @@ public class Employee {
         this.pa_surname = pa_surname;
     }
 
+    public String getCurp() {
+        return curp;
+    }
+
+    public void setCurp(String curp) {
+        this.curp = curp;
+    }
+
     @Override
     public String toString(){
-        return id + first_name;
+        return id +":"+ first_name  +" "+ curp;
     }
 }

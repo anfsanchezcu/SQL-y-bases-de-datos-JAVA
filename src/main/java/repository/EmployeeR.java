@@ -16,20 +16,27 @@ public class EmployeeR implements Repository<Employee> {
     final String ma_surname = "ma_surname";
     final String email = "email";
     final String salary = "salary";
+    final String curp = "curp";
 
     //SQLstatements
     final String sqlGetAll = "SELECT * FROM employees";
     final String sqlGetByID = "SELECT * FROM employees WHERE id =?";
-    final String sqlInsert = "INSERT INTO employees (first_name, pa_surname, ma_surname, email, salary) VALUE (?,?,?,?,?)";
+    final String sqlInsert = "INSERT INTO employees ("+first_name +","+ pa_surname +","+ ma_surname +","+ email +","+ salary +","+ curp +") VALUE (?,?,?,?,?,?)";
     final String sqlDelete = "DELETE FROM employees WHERE id=?";
 
     //auxiliar instances
     Employee employeeAux;
 
+
+
+    private Connection myConn;
+    public EmployeeR(Connection connection){
+        this.myConn = connection;
+    }
+
     private Connection getConnection() throws SQLException {
         return DBconnection.getInstance();
     }
-
 
     @Override
     public List<Employee> findAll() throws SQLException {
@@ -73,7 +80,7 @@ public class EmployeeR implements Repository<Employee> {
             myStatement.setString(3, employee.getMa_surname());
             myStatement.setString(4, employee.getEmail());
             myStatement.setFloat(5, employee.getSalary());
-
+            myStatement.setString(6, employee.getCurp());
             myStatement.executeUpdate();
         }
 
@@ -103,7 +110,8 @@ public class EmployeeR implements Repository<Employee> {
                 myRes.getString(pa_surname),
                 myRes.getString(ma_surname),
                 myRes.getString(email),
-                myRes.getFloat(salary)
+                myRes.getFloat(salary),
+                myRes.getString(curp)
         );
 
         employeeAux.setId(myRes.getInt("id"));

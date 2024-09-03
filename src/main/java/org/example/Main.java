@@ -17,23 +17,31 @@ public class Main {
         List<Employee> employeeList = new ArrayList<Employee>();
         Employee employeAux;
 
-        //Todos las instacias que son pasadas al try se cerraran al finalizar la ejecucion
+        try(
+            Connection myConn = DBconnection.getInstance()
+        ){
+            if(myConn.getAutoCommit())myConn.setAutoCommit(false);
 
-            Repository<Employee> respository  = new EmployeeR();
+            try{
+                Repository<Employee> repository = new EmployeeR(myConn);
+                employeAux = new Employee(
+                        "Carlos",
+                        "Tobon",
+                        "Tamayo",
+                        "calor@example.com",
+                        3000F,
+                        "ASDFGHQWERTY789456"
+                );
+                repository.save(employeAux);
+                myConn.commit();
+            }catch(SQLException e){
+                myConn.rollback();
+                throw new RuntimeException(e);
+            }
+        }
 
-            //System.out.println(respository.getById(20));
 
 
-            employeeList = respository.findAll();
-            employeeList.forEach(System.out::println);
-
-
-            //respository.save(new Employee("Edward", "Rondon", "Sanchez", "rondon@unal.edu.co", (float)2135));
-
-            //employeeList = respository.findAll();
-            //employeeList.forEach(System.out::println);
-
-            respository.delete(14);
 
     }
 }
