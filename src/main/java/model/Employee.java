@@ -90,6 +90,6 @@ public class Employee {
 
     @Override
     public String toString(){
-        return id +":"+ first_name  +" "+ curp;
+        return id +" "+ first_name + " "+curp;
     }
 }

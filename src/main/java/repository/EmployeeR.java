@@ -29,20 +29,19 @@ public class EmployeeR implements Repository<Employee> {
 
 
 
-    private Connection myConn;
-    public EmployeeR(Connection connection){
-        this.myConn = connection;
-    }
+
+
 
     private Connection getConnection() throws SQLException {
-        return DBconnection.getInstance();
+        return DBconnection.getConnection();
     }
 
     @Override
     public List<Employee> findAll() throws SQLException {
         List<Employee> employeesList = new ArrayList<>();
         try (
-                Statement myStatement = getConnection().createStatement();
+                Connection myConn = getConnection();
+                Statement myStatement = myConn.createStatement();
                 ResultSet myRes = myStatement.executeQuery(sqlGetAll);
         ) {
             while (myRes.next()) {
@@ -56,7 +55,8 @@ public class EmployeeR implements Repository<Employee> {
     @Override
     public Employee getById(Integer id) throws SQLException{
         try(
-            PreparedStatement myStatement = getConnection().prepareStatement(sqlGetByID);
+            Connection myConn = getConnection();
+            PreparedStatement myStatement = myConn.prepareStatement(sqlGetByID);
         ){
             myStatement.setInt(1,id);
             try(
@@ -73,7 +73,8 @@ public class EmployeeR implements Repository<Employee> {
     @Override
     public void save(Employee employee) throws SQLException{
         try(
-            PreparedStatement myStatement = getConnection().prepareStatement(sqlInsert);
+            Connection myConn = getConnection();
+            PreparedStatement myStatement = myConn.prepareStatement(sqlInsert);
         ){
             myStatement.setString(1, employee.getFirst_name());
             myStatement.setString(2, employee.getPa_surname());
@@ -89,8 +90,9 @@ public class EmployeeR implements Repository<Employee> {
     @Override
     public void delete(Integer id) throws SQLException {
         try(
-            PreparedStatement exist = getConnection().prepareStatement(sqlGetByID);
-            PreparedStatement myStatement = getConnection().prepareStatement(sqlDelete);
+            Connection myConn = getConnection();
+            PreparedStatement exist = myConn.prepareStatement(sqlGetByID);
+            PreparedStatement myStatement = myConn.prepareStatement(sqlDelete);
         ){
             exist.setInt(1,id);
             if(exist.executeQuery().next()){

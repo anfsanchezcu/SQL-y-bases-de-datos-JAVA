@@ -17,29 +17,13 @@ public class Main {
         List<Employee> employeeList = new ArrayList<Employee>();
         Employee employeAux;
 
-        try(
-            Connection myConn = DBconnection.getInstance()
-        ){
-            if(myConn.getAutoCommit())myConn.setAutoCommit(false);
+        System.out.println("listando todos");
 
-            try{
-                Repository<Employee> repository = new EmployeeR(myConn);
-                employeAux = new Employee(
-                        "Carlos",
-                        "Tobon",
-                        "Tamayo",
-                        "calor@example.com",
-                        3000F,
-                        "ASDFGHQWERTY789456"
-                );
-                repository.save(employeAux);
-                myConn.commit();
-            }catch(SQLException e){
-                myConn.rollback();
-                throw new RuntimeException(e);
-            }
-        }
+        Repository <Employee> repository  = new EmployeeR();
+        repository.findAll().forEach(System.out::println);
 
+        System.out.println("search by ID");
+        System.out.println(repository.getById(16));
 
 
 
